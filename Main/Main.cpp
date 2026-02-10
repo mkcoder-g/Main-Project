@@ -329,7 +329,7 @@ extern "C" _declspec(dllexport) void EntryProc() // OK
 		{
 			CreateThread(0,0,(LPTHREAD_START_ROUTINE)ReduceConsumeProc,0,0,0);
 		}
-
+		/*
 		#if(DEBUG_CONSOLE == 1)
 
 		if(AllocConsole() == 0)
@@ -343,6 +343,7 @@ extern "C" _declspec(dllexport) void EntryProc() // OK
 		DeleteMenu(GetSystemMenu(GetConsoleWindow(),0),SC_CLOSE,MF_BYCOMMAND);
 
 		#endif
+		*/
 	}
 	else
 	{
