@@ -293,7 +293,7 @@ extern "C" _declspec(dllexport) void EntryProc() // OK
 
 		InitMap();
 
-		//InitMiniMap();
+		InitMiniMap();
 
 		InitMonster();
 
