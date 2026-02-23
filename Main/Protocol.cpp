@@ -19,6 +19,15 @@
 #include "Util.h"
 #include "WindowTime.h"
 
+// NOVO: Estrutura idêntica a que enviamos pelo GameServer
+struct PMSG_CUSTOM_RANK_RECV
+{
+	PSBMSG_HEAD header;
+	WORD index;
+	WORD rankIndex;
+};
+void GCCustomRankRecv(PMSG_CUSTOM_RANK_RECV* lpMsg);
+
 BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
 {
 	switch (head)
@@ -83,25 +92,25 @@ BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
 		}
 		break;
 	case 0xD0:
-		switch(((lpMsg[0]==0xC1)?lpMsg[3]:lpMsg[4]))
+		switch (((lpMsg[0] == 0xC1) ? lpMsg[3] : lpMsg[4]))
 		{
-			case 0x04:
-				GCPcPointPointRecv((PMSG_PC_POINT_POINT_RECV*)lpMsg);
-				break;
+		case 0x04:
+			GCPcPointPointRecv((PMSG_PC_POINT_POINT_RECV*)lpMsg);
+			break;
 		}
 		break;
 	case 0xD5:
-		switch(((lpMsg[0]==0xC1)?lpMsg[3]:lpMsg[4]))
+		switch (((lpMsg[0] == 0xC1) ? lpMsg[3] : lpMsg[4]))
 		{
-			case 0x00:
-				GCPeriodicItemInit();
-				return 1;
-			case 0x01:
-				GCPeriodicItemRecv((PMSG_PERIODIC_ITEM_RECV*)lpMsg);
-				return 1;
-			case 0x02:
-				GCPeriodicItemDeleteRecv((PMSG_PERIODIC_ITEM_DELETE_RECV*)lpMsg);
-				return 1;
+		case 0x00:
+			GCPeriodicItemInit();
+			return 1;
+		case 0x01:
+			GCPeriodicItemRecv((PMSG_PERIODIC_ITEM_RECV*)lpMsg);
+			return 1;
+		case 0x02:
+			GCPeriodicItemDeleteRecv((PMSG_PERIODIC_ITEM_DELETE_RECV*)lpMsg);
+			return 1;
 		}
 		break;
 	case 0xF1:
@@ -119,62 +128,65 @@ BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
 		}
 		break;
 	case 0xF3:
-		switch(((lpMsg[0]== 0xC1)?lpMsg[3]:lpMsg[4]))
+		switch (((lpMsg[0] == 0xC1) ? lpMsg[3] : lpMsg[4]))
 		{
-			case 0x00:
-				GCCharacterListRecv((PMSG_CHARACTER_LIST_RECV*)lpMsg);
-				break;
-			case 0x03:
-				GCCharacterInfoRecv((PMSG_CHARACTER_INFO_RECV*)lpMsg);
-				break;
-			case 0x04:
-				GCCharacterRegenRecv((PMSG_CHARACTER_REGEN_RECV*)lpMsg);
-				break;
-			case 0x05:
-				GCLevelUpRecv((PMSG_LEVEL_UP_RECV*)lpMsg);
-				break;
-			case 0x06:
-				GCLevelUpPointRecv((PMSG_LEVEL_UP_POINT_RECV*)lpMsg);
-				break;
-			case 0x07:
-				GCMonsterDamageRecv((PMSG_MONSTER_DAMAGE_RECV*)lpMsg);
-				break;
-			case 0xE0:
-				GCNewCharacterInfoRecv((PMSG_NEW_CHARACTER_INFO_RECV*)lpMsg);
-				return 1;
-			case 0xE1:
-				GCNewCharacterCalcRecv((PMSG_NEW_CHARACTER_CALC_RECV*)lpMsg);
-				return 1;
-			case 0xE2:
-				GCNewHealthBarRecv((PMSG_NEW_HEALTH_BAR_RECV*)lpMsg);
-				return 1;
-			case 0xE4:
-				GCNewMessageRecv((PMSG_NEW_MESSAGE_RECV*)lpMsg);
-				return 1;
-			case 0xE6:
-				GCPcPointPriceListRecv((PMSG_PC_POINT_PRICE_LIST_RECV*)lpMsg);
-				return 1;
-			case 0xE7:
-				GCShopPriceListRecv((PMSG_SHOP_PRICE_LIST_RECV*)lpMsg);
-				return 1;
-			case 0xE8:
-				GCWindowNameRecv((PMSG_WINDOW_NAME_RECV*)lpMsg);
-				return 1;
-			case 0xEA:
-				CCServerNameRecv((PMSG_SERVER_NAME_RECV*)lpMsg);
-				return 1;
-			case 0xEB:
-				GCCustomAttackStatusRecv((PMSG_CUSTOM_ATTACK_STATUS_RECV*)lpMsg);
-				return 1;
-			case 0xEC:
-				GCItemStackListRecv((PMSG_ITEM_LIST_INFO_RECV*)lpMsg);
-				return 1;
-			case 0xED:
-				GCItemValueListRecv((PMSG_ITEM_LIST_INFO_RECV*)lpMsg);
-				return 1;
-			case 0xEF:
-				GCEventTimeListRecv((PMSG_EVENT_TIME_LIST_RECV*)lpMsg);
-				return 1;
+		case 0x00:
+			GCCharacterListRecv((PMSG_CHARACTER_LIST_RECV*)lpMsg);
+			break;
+		case 0x03:
+			GCCharacterInfoRecv((PMSG_CHARACTER_INFO_RECV*)lpMsg);
+			break;
+		case 0x04:
+			GCCharacterRegenRecv((PMSG_CHARACTER_REGEN_RECV*)lpMsg);
+			break;
+		case 0x05:
+			GCLevelUpRecv((PMSG_LEVEL_UP_RECV*)lpMsg);
+			break;
+		case 0x06:
+			GCLevelUpPointRecv((PMSG_LEVEL_UP_POINT_RECV*)lpMsg);
+			break;
+		case 0x07:
+			GCMonsterDamageRecv((PMSG_MONSTER_DAMAGE_RECV*)lpMsg);
+			break;
+		case 0xE0:
+			GCNewCharacterInfoRecv((PMSG_NEW_CHARACTER_INFO_RECV*)lpMsg);
+			return 1;
+		case 0xE1:
+			GCNewCharacterCalcRecv((PMSG_NEW_CHARACTER_CALC_RECV*)lpMsg);
+			return 1;
+		case 0xE2:
+			GCNewHealthBarRecv((PMSG_NEW_HEALTH_BAR_RECV*)lpMsg);
+			return 1;
+		case 0xE3: // NOVO: Interceta o pacote do GS e envia para a memória do Cliente
+			GCCustomRankRecv((PMSG_CUSTOM_RANK_RECV*)lpMsg);
+			return 1;
+		case 0xE4:
+			GCNewMessageRecv((PMSG_NEW_MESSAGE_RECV*)lpMsg);
+			return 1;
+		case 0xE6:
+			GCPcPointPriceListRecv((PMSG_PC_POINT_PRICE_LIST_RECV*)lpMsg);
+			return 1;
+		case 0xE7:
+			GCShopPriceListRecv((PMSG_SHOP_PRICE_LIST_RECV*)lpMsg);
+			return 1;
+		case 0xE8:
+			GCWindowNameRecv((PMSG_WINDOW_NAME_RECV*)lpMsg);
+			return 1;
+		case 0xEA:
+			CCServerNameRecv((PMSG_SERVER_NAME_RECV*)lpMsg);
+			return 1;
+		case 0xEB:
+			GCCustomAttackStatusRecv((PMSG_CUSTOM_ATTACK_STATUS_RECV*)lpMsg);
+			return 1;
+		case 0xEC:
+			GCItemStackListRecv((PMSG_ITEM_LIST_INFO_RECV*)lpMsg);
+			return 1;
+		case 0xED:
+			GCItemValueListRecv((PMSG_ITEM_LIST_INFO_RECV*)lpMsg);
+			return 1;
+		case 0xEF:
+			GCEventTimeListRecv((PMSG_EVENT_TIME_LIST_RECV*)lpMsg);
+			return 1;
 		}
 		break;
 	}
@@ -182,20 +194,29 @@ BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
 	return ProtocolCore(head, lpMsg, size, key);
 }
 
+// ============================================
+// NOVO: Função que processa o Index da Patente 
+// ============================================
+void GCCustomRankRecv(PMSG_CUSTOM_RANK_RECV* lpMsg) // OK
+{
+	InsertCustomRank(lpMsg->index, lpMsg->rankIndex);
+}
+// ============================================
+
 void GCWindowNameRecv(PMSG_WINDOW_NAME_RECV* lpMsg) // OK
 {
-	strcpy_s(WindowName,lpMsg->title);
+	strcpy_s(WindowName, lpMsg->title);
 }
 
 void CCServerNameRecv(PMSG_SERVER_NAME_RECV* lpMsg) // OK
 {
-	memset(ServerName,0,sizeof(ServerName));
+	memset(ServerName, 0, sizeof(ServerName));
 
-	for(int n=0;n < lpMsg->count;n++)
+	for (int n = 0; n < lpMsg->count; n++)
 	{
-		PMSG_SERVER_NAME* lpInfo = (PMSG_SERVER_NAME*)(((BYTE*)lpMsg)+sizeof(PMSG_SERVER_NAME_RECV)+(sizeof(PMSG_SERVER_NAME)*n));
+		PMSG_SERVER_NAME* lpInfo = (PMSG_SERVER_NAME*)(((BYTE*)lpMsg) + sizeof(PMSG_SERVER_NAME_RECV) + (sizeof(PMSG_SERVER_NAME)*n));
 
-		memcpy(ServerName[lpInfo->index],lpInfo->Name,sizeof(ServerName[lpInfo->index]));
+		memcpy(ServerName[lpInfo->index], lpInfo->Name, sizeof(ServerName[lpInfo->index]));
 	}
 }
 
@@ -215,7 +236,7 @@ void GCDamageRecv(PMSG_DAMAGE_RECV* lpMsg) // OK
 
 void GCCharacterCreationEnableRecv(PMSG_CHARACTER_CREATION_ENABLE_RECV* lpMsg) // OK
 {
-	SetExperienceTable(lpMsg->CharacterMaxLevel,lpMsg->ExperienceMultiplierConstA,lpMsg->ExperienceMultiplierConstB,lpMsg->CharacterDeleteMaxLevel);
+	SetExperienceTable(lpMsg->CharacterMaxLevel, lpMsg->ExperienceMultiplierConstA, lpMsg->ExperienceMultiplierConstB, lpMsg->CharacterDeleteMaxLevel);
 }
 
 void GCMonsterDieRecv(PMSG_MONSTER_DIE_RECV* lpMsg) // OK
@@ -291,26 +312,26 @@ void GCFruitResultRecv(PMSG_FRUIT_RESULT_RECV* lpMsg) // OK
 
 void GCPeriodicEffectRecv(PMSG_PERIODIC_EFFECT_RECV* lpMsg) // OK
 {
-	if(lpMsg->group == 2)
+	if (lpMsg->group == 2)
 	{
-		if(lpMsg->state)
+		if (lpMsg->state)
 		{
-			if((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x20) == 0x20)
+			if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x20) == 0x20)
 				*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) -= 0x20;
 
-			if((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x40) == 0x40)
+			if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x40) == 0x40)
 				*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) -= 0x40;
 
-			if((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x80) == 0x80)
+			if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x80) == 0x80)
 				*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) -= 0x80;
 
-			KillTimer(*(HWND*)(MAIN_WINDOW),1007);
+			KillTimer(*(HWND*)(MAIN_WINDOW), 1007);
 
 			*(DWORD*)0x07AFEE7C = 0;
 		}
 		else
 		{
-			if(lpMsg->value == 6)
+			if (lpMsg->value == 6)
 			{
 				if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x20) != 0x20)
 					*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) |= 0x20;
@@ -321,7 +342,7 @@ void GCPeriodicEffectRecv(PMSG_PERIODIC_EFFECT_RECV* lpMsg) // OK
 				if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x80) == 0x80)
 					*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) -= 0x80;
 			}
-			else if(lpMsg->value == 7)
+			else if (lpMsg->value == 7)
 			{
 				if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x20) == 0x20)
 					*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) -= 0x20;
@@ -332,7 +353,7 @@ void GCPeriodicEffectRecv(PMSG_PERIODIC_EFFECT_RECV* lpMsg) // OK
 				if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x80) == 0x80)
 					*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) -= 0x80;
 			}
-			else if(lpMsg->value == 8)
+			else if (lpMsg->value == 8)
 			{
 				if ((*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) & 0x20) == 0x20)
 					*(DWORD*)(*(DWORD*)(MAIN_VIEWPORT_STRUCT)+172) -= 0x20;
@@ -346,9 +367,9 @@ void GCPeriodicEffectRecv(PMSG_PERIODIC_EFFECT_RECV* lpMsg) // OK
 
 			*(DWORD*)0x07AFEE7C = lpMsg->time;
 
-			KillTimer(*(HWND*)(MAIN_WINDOW),1007);
+			KillTimer(*(HWND*)(MAIN_WINDOW), 1007);
 
-			SetTimer(*(HWND*)(MAIN_WINDOW),1007,1000,0);
+			SetTimer(*(HWND*)(MAIN_WINDOW), 1007, 1000, 0);
 		}
 	}
 }
@@ -547,7 +568,7 @@ void GCNewHealthBarRecv(PMSG_NEW_HEALTH_BAR_RECV* lpMsg) // OK
 {
 	ClearNewHealthBar();
 
-	for (int n = 0; n<lpMsg->count; n++)
+	for (int n = 0; n < lpMsg->count; n++)
 	{
 		PMSG_NEW_HEALTH_RECV* lpInfo = (PMSG_NEW_HEALTH_RECV*)(((BYTE*)lpMsg) + sizeof(PMSG_NEW_HEALTH_BAR_RECV) + (sizeof(PMSG_NEW_HEALTH_RECV)*n));
 
@@ -557,17 +578,17 @@ void GCNewHealthBarRecv(PMSG_NEW_HEALTH_BAR_RECV* lpMsg) // OK
 
 void GCNewMessageRecv(PMSG_NEW_MESSAGE_RECV* lpMsg) // OK
 {
-	if(lpMsg->type == 0)
+	if (lpMsg->type == 0)
 	{
 		((int(__cdecl*)(char*))0x0065CF60)(lpMsg->message);
 	}
-	else if(lpMsg->type == 1)
+	else if (lpMsg->type == 1)
 	{
-		((void*(*)(char*,char*,int))0x0053EC70)("",lpMsg->message,lpMsg->color);
+		((void*(*)(char*, char*, int))0x0053EC70)("", lpMsg->message, lpMsg->color);
 	}
-	else if(lpMsg->type == 2)
+	else if (lpMsg->type == 2)
 	{
-		NoticeAdd(lpMsg->color,lpMsg->message);
+		NoticeAdd(lpMsg->color, lpMsg->message);
 	}
 }
 

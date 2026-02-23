@@ -7,6 +7,7 @@
 #include "Util.h"
 
 NEW_HEALTH_BAR gNewHealthBar[MAX_MAIN_VIEWPORT];
+CUSTOM_RANK_DATA gCustomRankData[MAX_MAIN_VIEWPORT]; // Array do Custom Rank
 
 bool MonsterHPBarMode = 0;
 
@@ -16,41 +17,91 @@ void HealthBarToggle() // OK
 	{
 		MonsterHPBarMode ^= 1;
 
-		pDrawMessage(gCustomMessage.GetMessage(4+MonsterHPBarMode),1);
+		pDrawMessage(gCustomMessage.GetMessage(4 + MonsterHPBarMode), 1);
 	}
 }
 
-void ClearNewHealthBar() // OK
+// --- FUNÇÕES DO CUSTOM RANK ---
+void ClearCustomRank()
 {
-	for(int n=0;n<MAX_MAIN_VIEWPORT;n++)
+	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
 	{
-		gNewHealthBar[n].index=0xFFFF;
-		gNewHealthBar[n].type=0;
-		gNewHealthBar[n].rate=0;
+		gCustomRankData[n].index = 0xFFFF;
+		gCustomRankData[n].rankIndex = 0;
 	}
 }
 
-void InsertNewHealthBar(WORD index,BYTE type,BYTE rate) // OK
+void InsertCustomRank(WORD index, WORD rankIndex)
 {
-	for(int n=0;n<MAX_MAIN_VIEWPORT;n++)
+	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
 	{
-		if(gNewHealthBar[n].index == 0xFFFF)
+		if (gCustomRankData[n].index == index)
 		{
-			gNewHealthBar[n].index=index;
-			gNewHealthBar[n].type=type;
-			gNewHealthBar[n].rate=rate;
+			gCustomRankData[n].rankIndex = rankIndex;
+			return;
+		}
+	}
+
+	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
+	{
+		if (gCustomRankData[n].index == 0xFFFF)
+		{
+			gCustomRankData[n].index = index;
+			gCustomRankData[n].rankIndex = rankIndex;
 			return;
 		}
 	}
 }
 
-NEW_HEALTH_BAR* GetNewHealthBar(WORD index,BYTE type) // OK
+CUSTOM_RANK_DATA* GetCustomRank(WORD index)
 {
-	for(int n=0;n < MAX_MAIN_VIEWPORT;n++)
+	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
 	{
-		if(gNewHealthBar[n].index != 0xFFFF)
+		if (gCustomRankData[n].index != 0xFFFF)
 		{
-			if(gNewHealthBar[n].index == index && gNewHealthBar[n].type == type)
+			if (gCustomRankData[n].index == index)
+			{
+				return &gCustomRankData[n];
+			}
+		}
+	}
+	return 0;
+}
+// ------------------------------
+
+void ClearNewHealthBar() // OK
+{
+	ClearCustomRank(); // Limpa os ranks quando mudar de mapa
+
+	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
+	{
+		gNewHealthBar[n].index = 0xFFFF;
+		gNewHealthBar[n].type = 0;
+		gNewHealthBar[n].rate = 0;
+	}
+}
+
+void InsertNewHealthBar(WORD index, BYTE type, BYTE rate) // OK
+{
+	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
+	{
+		if (gNewHealthBar[n].index == 0xFFFF)
+		{
+			gNewHealthBar[n].index = index;
+			gNewHealthBar[n].type = type;
+			gNewHealthBar[n].rate = rate;
+			return;
+		}
+	}
+}
+
+NEW_HEALTH_BAR* GetNewHealthBar(WORD index, BYTE type) // OK
+{
+	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
+	{
+		if (gNewHealthBar[n].index != 0xFFFF)
+		{
+			if (gNewHealthBar[n].index == index && gNewHealthBar[n].type == type)
 			{
 				return &gNewHealthBar[n];
 			}
@@ -64,7 +115,7 @@ void DrawNewHealthBar() // OK
 {
 	((void(*)())0x0059E7A0)();
 
-	if(MonsterHPBarMode != 0)
+	if (MonsterHPBarMode != 0)
 	{
 		return;
 	}
@@ -90,52 +141,68 @@ void DrawNewHealthBar() // OK
 			continue;
 		}
 
-		lpHealthBar = GetNewHealthBar(*(WORD*)(ViewportAddress + 0x22C), *(BYTE*)(ViewportAddress + 0xBC));
-
-		if (lpHealthBar == 0)
-		{
-			continue;
-		}
-
 		Angle[0] = *(float*)(ViewportAddress + 0x10);
-
 		Angle[1] = *(float*)(ViewportAddress + 0x14);
-
 		Angle[2] = *(float*)(ViewportAddress + 0x16C) + *(float*)(ViewportAddress + 0x18) + 100.0f;
 
 		pGetPosFromAngle(Angle, &PosX, &PosY);
-
 		PosX -= (int)floor((double)LifeBarWidth / 2.0);
+
+		// ==========================================
+		// DESENHO DA PATENTE NA TELA (CUSTOM RANK)
+		// ==========================================
+		WORD ObjectIndex = *(WORD*)(ViewportAddress + 0x22C);
+		CUSTOM_RANK_DATA* lpRank = GetCustomRank(ObjectIndex);
+
+		if (lpRank != 0 && lpRank->rankIndex > 0)
+		{
+			char rankName[32];
+
+			// Traduz o ID do GameServer para o Nome da Patente na tela
+			switch (lpRank->rankIndex)
+			{
+			case 1: wsprintf(rankName, "[ Iniciante ]"); break;
+			case 2: wsprintf(rankName, "[ Soldado ]"); break;
+			case 3: wsprintf(rankName, "[ Veterano ]"); break;
+			case 4: wsprintf(rankName, "[ General ]"); break;
+			case 5: wsprintf(rankName, "[ Lenda ]"); break;
+			default: wsprintf(rankName, "[ Supremo ]"); break;
+			}
+
+			EnableAlphaTest(true);
+			pSetTextFont(pTextThis(), pFontNormal);
+			pSetTextColor(pTextThis(), 255, 215, 0, 255); // Dourado
+			pSetBGTextColor(pTextThis(), 0, 0, 0, 0); // Fundo invisível
+
+			// Desenha o texto um pouco acima do personagem
+			pDrawText(pTextThis(), (PosX + (int)(LifeBarWidth / 2)), PosY - 20, rankName, 0, 0, 8, 0);
+		}
+		// ==========================================
+
+		lpHealthBar = GetNewHealthBar(ObjectIndex, *(BYTE*)(ViewportAddress + 0xBC));
+
+		if (lpHealthBar == 0)
+		{
+			continue; // Se não tiver barra de vida, pula essa parte, mas já desenhou o Rank!
+		}
 
 		if ((pCursorX >= PosX) && (pCursorX <= PosX + (int)LifeBarWidth) && (pCursorY >= PosY - 2) && (pCursorY < PosY + 6))
 		{
 			EnableAlphaTest(true);
-
 			wsprintf(LifeDisplay, "%s: %d%%", (char*)(ViewportAddress + 529), lpHealthBar->rate);
-
-			pSetTextFont(pTextThis(),pFontNormal);
-
-			pSetBGTextColor(pTextThis(),0,0,0,192);
-
-			pSetTextColor(pTextThis(),255,255,255,255);
-
-			pDrawText(pTextThis(), (PosX+(int)(LifeBarWidth/2)), PosY-8, LifeDisplay, 0, 0, 8, 0);
+			pSetTextFont(pTextThis(), pFontNormal);
+			pSetBGTextColor(pTextThis(), 0, 0, 0, 192);
+			pSetTextColor(pTextThis(), 255, 255, 255, 255);
+			pDrawText(pTextThis(), (PosX + (int)(LifeBarWidth / 2)), PosY - 8, LifeDisplay, 0, 0, 8, 0);
 		}
 
 		EnableAlphaTest(true);
-
 		glColor4f(0.0f, 0.0f, 0.0f, 0.75f);
-
 		pDrawBarForm((float)PosX, (float)PosY, LifeBarWidth, 6.0f);
-
 		glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
-
 		pDrawBarForm((float)PosX + 2, (float)PosY + 2, ((LifeBarWidth - 4) * lpHealthBar->rate) / 100, 2.0f);
-
 		glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
 		glEnable(GL_TEXTURE_2D);
-
 		DisableAlphaBlend();
 	}
 }
