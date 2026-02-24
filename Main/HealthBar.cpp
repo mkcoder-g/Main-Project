@@ -7,7 +7,7 @@
 #include "Util.h"
 
 NEW_HEALTH_BAR gNewHealthBar[MAX_MAIN_VIEWPORT];
-CUSTOM_RANK_DATA gCustomRankData[MAX_MAIN_VIEWPORT]; // Array do Custom Rank
+WORD gCustomRankData[MAX_CUSTOM_RANK] = { 0 }; // Array otimizado (Sem necessidade de structs)
 
 bool MonsterHPBarMode = 0;
 
@@ -21,49 +21,21 @@ void HealthBarToggle() // OK
 	}
 }
 
-// --- FUNÇÕES DO CUSTOM RANK ---
-void ClearCustomRank()
-{
-	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
-	{
-		gCustomRankData[n].index = 0xFFFF;
-		gCustomRankData[n].rankIndex = 0;
-	}
-}
-
+// --- FUNÇÕES DO CUSTOM RANK (OTIMIZADAS) ---
 void InsertCustomRank(WORD index, WORD rankIndex)
 {
-	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
+	// Acesso direto na memória, sem loops que causam Lag/Bugs!
+	if (index < MAX_CUSTOM_RANK)
 	{
-		if (gCustomRankData[n].index == index)
-		{
-			gCustomRankData[n].rankIndex = rankIndex;
-			return;
-		}
-	}
-
-	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
-	{
-		if (gCustomRankData[n].index == 0xFFFF)
-		{
-			gCustomRankData[n].index = index;
-			gCustomRankData[n].rankIndex = rankIndex;
-			return;
-		}
+		gCustomRankData[index] = rankIndex;
 	}
 }
 
-CUSTOM_RANK_DATA* GetCustomRank(WORD index)
+WORD GetCustomRank(WORD index)
 {
-	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
+	if (index < MAX_CUSTOM_RANK)
 	{
-		if (gCustomRankData[n].index != 0xFFFF)
-		{
-			if (gCustomRankData[n].index == index)
-			{
-				return &gCustomRankData[n];
-			}
-		}
+		return gCustomRankData[index];
 	}
 	return 0;
 }
@@ -71,7 +43,7 @@ CUSTOM_RANK_DATA* GetCustomRank(WORD index)
 
 void ClearNewHealthBar() // OK
 {
-	ClearCustomRank(); // Limpa os ranks quando mudar de mapa
+	// O comando de limpar Rank foi removido daqui para a barra de HP parar de deletar as patentes!
 
 	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
 	{
@@ -152,32 +124,52 @@ void DrawNewHealthBar() // OK
 		// DESENHO DA PATENTE NA TELA (CUSTOM RANK)
 		// ==========================================
 		WORD ObjectIndex = *(WORD*)(ViewportAddress + 0x22C);
-		CUSTOM_RANK_DATA* lpRank = GetCustomRank(ObjectIndex);
+		WORD rankIndex = GetCustomRank(ObjectIndex);
 
-		if (lpRank != 0 && lpRank->rankIndex > 0)
+		// Trava de segurança: só desenha se o ID for de 1 a 15
+		if (rankIndex > 0 && rankIndex <= 15)
 		{
 			char rankName[32];
 
-			// Traduz o ID do GameServer para o Nome da Patente na tela
-			switch (lpRank->rankIndex)
+			switch (rankIndex)
 			{
-			case 1: wsprintf(rankName, "[ Iniciante ]"); break;
-			case 2: wsprintf(rankName, "[ Soldado ]"); break;
-			case 3: wsprintf(rankName, "[ Veterano ]"); break;
-			case 4: wsprintf(rankName, "[ General ]"); break;
-			case 5: wsprintf(rankName, "[ Lenda ]"); break;
-			default: wsprintf(rankName, "[ Supremo ]"); break;
+			case 1: wsprintf(rankName, "[ Recruta ]"); break;
+			case 2: wsprintf(rankName, "[ Aprendiz ]"); break;
+			case 3: wsprintf(rankName, "[ Soldado ]"); break;
+			case 4: wsprintf(rankName, "[ Cabo ]"); break;
+			case 5: wsprintf(rankName, "[ Sargento ]"); break;
+			case 6: wsprintf(rankName, "[ Tenente ]"); break;
+			case 7: wsprintf(rankName, "[ Capitão ]"); break;
+			case 8: wsprintf(rankName, "[ Major ]"); break;
+			case 9: wsprintf(rankName, "[ Tenente Coronel ]"); break;
+			case 10: wsprintf(rankName, "[ Coronel ]"); break;
+			case 11: wsprintf(rankName, "[ General ]"); break;
+			case 12: wsprintf(rankName, "[ Marechal ]"); break;
+			case 13: wsprintf(rankName, "[ Gladiador ]"); break;
+			case 14: wsprintf(rankName, "[ Herói ]"); break;
+			case 15: wsprintf(rankName, "[ Lenda Suprema ]"); break;
 			}
 
 			EnableAlphaTest(true);
-			pSetTextFont(pTextThis(), pFontNormal);
-			pSetTextColor(pTextThis(), 255, 215, 0, 255); // Dourado
-			pSetBGTextColor(pTextThis(), 0, 0, 0, 0); // Fundo invisível
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-			// Desenha o texto um pouco acima do personagem
-			pDrawText(pTextThis(), (PosX + (int)(LifeBarWidth / 2)), PosY - 20, rankName, 0, 0, 8, 0);
+			// 1. DESENHA A IMAGEM (ÍCONE À ESQUERDA)
+			float imgSize = 16.0f; // Tamanho reduzido para não cobrir a tela toda
+
+			// Puxa a imagem para a esquerda (-28 pixels do centro) e iguala a altura do texto (-21)
+			float imgX = (float)PosX + (LifeBarWidth / 2.0f) - 28.0f;
+			float imgY = (float)PosY - 21.0f;
+
+			pRenderBitmap(9000 + rankIndex, imgX, imgY, imgSize, imgSize, 0.0f, 0.0f, 1.0f, 1.0f, 1, 1, 0.0f);
+
+			// 2. DESENHA O TEXTO
+			pSetTextFont(pTextThis(), pFontNormal);
+			pSetTextColor(pTextThis(), 255, 215, 0, 255);
+			pSetBGTextColor(pTextThis(), 0, 0, 0, 0);
+
+			// Empurra o texto um pouquinho para a direita (+8 pixels) para não atropelar a imagem
+			pDrawText(pTextThis(), (PosX + (int)(LifeBarWidth / 2)) + 8, PosY - 20, rankName, 0, 0, 8, 0);
 		}
-		// ==========================================
 
 		lpHealthBar = GetNewHealthBar(ObjectIndex, *(BYTE*)(ViewportAddress + 0xBC));
 

@@ -52,6 +52,8 @@ void OpenBasicData(HDC hDC) // OK
 
 	LoadItemModel(GET_ITEM_MODEL(12,143),"Item\\","HighRefineStone");
 	LoadItemTexture(GET_ITEM_MODEL(12,143),"Item\\");
+
+
 	
 
 	for(int n=0;n<MAX_CUSTOM_JEWEL;n++)
@@ -89,7 +91,20 @@ void OpenBasicData(HDC hDC) // OK
 			LoadItemTexture((gCustomItemBow.m_CustomItemBowInfo[n].ItemIndex+ITEM_BASE_MODEL),"Item\\");
 		}
 	}
-}
+
+
+	// ====================================================
+	// CARREGADOR DE IMAGENS DO CUSTOM RANK (1 a 15)
+	// ====================================================
+	for (int i = 1; i <= 15; i++)
+	{
+		char path[MAX_PATH];
+		wsprintf(path, "Data\\Custom\\Rank\\Rank%d.ozt", i);
+		
+		// TROCADO DE 31000 PARA 9000
+		pLoadImageTGA(path, 9000 + i, 0x2601, 0x2900, 1, 0); 
+	}
+} // Fim da função OpenBasicData
 
 void SetMaxTextures(DWORD count) // OK
 {

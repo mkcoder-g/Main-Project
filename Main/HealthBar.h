@@ -1,6 +1,7 @@
 #pragma once
 
 #define MAX_MAIN_VIEWPORT 400
+#define MAX_CUSTOM_RANK 10000 // NOVO: Limite ajustado para a escala real de IDs do GameServer
 
 struct NEW_HEALTH_BAR
 {
@@ -10,15 +11,8 @@ struct NEW_HEALTH_BAR
 };
 
 // --- INÍCIO DO CUSTOM RANK ---
-struct CUSTOM_RANK_DATA
-{
-	WORD index;
-	WORD rankIndex;
-};
-
-void ClearCustomRank();
 void InsertCustomRank(WORD index, WORD rankIndex);
-CUSTOM_RANK_DATA* GetCustomRank(WORD index);
+WORD GetCustomRank(WORD index);
 // --- FIM DO CUSTOM RANK ---
 
 void HealthBarToggle();

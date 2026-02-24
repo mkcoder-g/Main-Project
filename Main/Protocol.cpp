@@ -19,13 +19,15 @@
 #include "Util.h"
 #include "WindowTime.h"
 
-// NOVO: Estrutura idêntica a que enviamos pelo GameServer
+#pragma pack(push, 1) // TRAVA DE SEGURANÇA DE REDE
 struct PMSG_CUSTOM_RANK_RECV
 {
 	PSBMSG_HEAD header;
 	WORD index;
 	WORD rankIndex;
 };
+#pragma pack(pop)
+
 void GCCustomRankRecv(PMSG_CUSTOM_RANK_RECV* lpMsg);
 
 BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
