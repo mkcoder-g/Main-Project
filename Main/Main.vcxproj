@@ -64,6 +64,7 @@
     <ClInclude Include="CustomMap.h" />
     <ClInclude Include="CustomMessage.h" />
     <ClInclude Include="CustomMonster.h" />
+    <ClInclude Include="CustomRankingTotal.h" />
     <ClInclude Include="CustomTooltip.h" />
     <ClInclude Include="CustomWing.h" />
     <ClInclude Include="Effect.h" />
@@ -119,6 +120,7 @@
     <ClCompile Include="CustomMap.cpp" />
     <ClCompile Include="CustomMessage.cpp" />
     <ClCompile Include="CustomMonster.cpp" />
+    <ClCompile Include="CustomRankingTotal.cpp" />
     <ClCompile Include="CustomTooltip.cpp" />
     <ClCompile Include="CustomWing.cpp" />
     <ClCompile Include="Effect.cpp" />

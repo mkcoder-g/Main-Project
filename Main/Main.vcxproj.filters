@@ -177,6 +177,9 @@
     <ClInclude Include="Structs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CustomRankingTotal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -331,6 +334,9 @@
     </ClCompile>
     <ClCompile Include="Structs.cpp">
       <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomRankingTotal.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

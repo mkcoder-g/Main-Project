@@ -18,6 +18,7 @@
 #include "Shop.h"
 #include "Util.h"
 #include "WindowTime.h"
+#include "CustomRankingTotal.h" // <-- NOVO: OBRIGATÓRIO PARA LER O PACOTE
 
 #pragma pack(push, 1) // TRAVA DE SEGURANÇA DE REDE
 struct PMSG_CUSTOM_RANK_RECV
@@ -159,12 +160,19 @@ BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
 		case 0xE2:
 			GCNewHealthBarRecv((PMSG_NEW_HEALTH_BAR_RECV*)lpMsg);
 			return 1;
-		case 0xE3: // NOVO: Interceta o pacote do GS e envia para a memória do Cliente
+		case 0xE3:
 			GCCustomRankRecv((PMSG_CUSTOM_RANK_RECV*)lpMsg);
 			return 1;
 		case 0xE4:
 			GCNewMessageRecv((PMSG_NEW_MESSAGE_RECV*)lpMsg);
 			return 1;
+
+			// ===========================================
+		case 0xE5: // O NOSSO CANAL DE REDE EXCLUSIVO!
+			GCRankingRecv((PMSG_CUSTOM_RANKING_RECV*)lpMsg);
+			return 1;
+			// ===========================================
+
 		case 0xE6:
 			GCPcPointPriceListRecv((PMSG_PC_POINT_PRICE_LIST_RECV*)lpMsg);
 			return 1;
@@ -196,14 +204,10 @@ BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
 	return ProtocolCore(head, lpMsg, size, key);
 }
 
-// ============================================
-// NOVO: Função que processa o Index da Patente 
-// ============================================
 void GCCustomRankRecv(PMSG_CUSTOM_RANK_RECV* lpMsg) // OK
 {
 	InsertCustomRank(lpMsg->index, lpMsg->rankIndex);
 }
-// ============================================
 
 void GCWindowNameRecv(PMSG_WINDOW_NAME_RECV* lpMsg) // OK
 {

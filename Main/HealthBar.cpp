@@ -5,6 +5,7 @@
 #include "PrintPlayer.h"
 #include "Protect.h"
 #include "Util.h"
+#include "CustomRankingTotal.h"
 
 NEW_HEALTH_BAR gNewHealthBar[MAX_MAIN_VIEWPORT];
 WORD gCustomRankData[MAX_CUSTOM_RANK] = { 0 }; // Array otimizado (Sem necessidade de structs)
@@ -198,4 +199,10 @@ void DrawNewHealthBar() // OK
 		glEnable(GL_TEXTURE_2D);
 		DisableAlphaBlend();
 	}
+	// ==========================================
+	// SISTEMA DE RANKING F5 (AO VIVO)
+	// ==========================================
+	CheckRankingKeyF5();
+	DrawCustomRankingWindow();
+	// ==========================================
 }
