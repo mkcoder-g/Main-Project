@@ -43,8 +43,6 @@ WORD GetCustomRank(WORD index)
 
 void ClearNewHealthBar() // OK
 {
-	// O comando de limpar Rank foi removido daqui para a barra de HP parar de deletar as patentes!
-
 	for (int n = 0; n < MAX_MAIN_VIEWPORT; n++)
 	{
 		gNewHealthBar[n].index = 0xFFFF;
@@ -133,21 +131,21 @@ void DrawNewHealthBar() // OK
 
 			switch (rankIndex)
 			{
-			case 1: wsprintf(rankName, "[ Recruta ]"); break;
-			case 2: wsprintf(rankName, "[ Aprendiz ]"); break;
-			case 3: wsprintf(rankName, "[ Soldado ]"); break;
-			case 4: wsprintf(rankName, "[ Cabo ]"); break;
-			case 5: wsprintf(rankName, "[ Sargento ]"); break;
-			case 6: wsprintf(rankName, "[ Tenente ]"); break;
-			case 7: wsprintf(rankName, "[ Capitão ]"); break;
-			case 8: wsprintf(rankName, "[ Major ]"); break;
-			case 9: wsprintf(rankName, "[ Tenente Coronel ]"); break;
-			case 10: wsprintf(rankName, "[ Coronel ]"); break;
-			case 11: wsprintf(rankName, "[ General ]"); break;
-			case 12: wsprintf(rankName, "[ Marechal ]"); break;
-			case 13: wsprintf(rankName, "[ Gladiador ]"); break;
-			case 14: wsprintf(rankName, "[ Herói ]"); break;
-			case 15: wsprintf(rankName, "[ Lenda Suprema ]"); break;
+			case 1: wsprintf(rankName, "Recruta"); break;
+			case 2: wsprintf(rankName, "Aprendiz"); break;
+			case 3: wsprintf(rankName, "Soldado"); break;
+			case 4: wsprintf(rankName, "Cabo"); break;
+			case 5: wsprintf(rankName, "Sargento"); break;
+			case 6: wsprintf(rankName, "Tenente"); break;
+			case 7: wsprintf(rankName, "Capitão"); break;
+			case 8: wsprintf(rankName, "Major"); break;
+			case 9: wsprintf(rankName, "Tenente Coronel"); break;
+			case 10: wsprintf(rankName, "Coronel"); break;
+			case 11: wsprintf(rankName, "General"); break;
+			case 12: wsprintf(rankName, "Marechal"); break;
+			case 13: wsprintf(rankName, "Gladiador"); break;
+			case 14: wsprintf(rankName, "Herói"); break;
+			case 15: wsprintf(rankName, "Lenda Suprema"); break;
 			}
 
 			EnableAlphaTest(true);
@@ -155,13 +153,14 @@ void DrawNewHealthBar() // OK
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Restaura as cores reais da imagem
 
 			// 1. DESENHA A IMAGEM (ÍCONE À ESQUERDA)
-			float imgSize = 16.0f;
+			float imgSize = 12.0f; // <-- REDUZIDO DE 16.0f PARA 12.0f (Mude este número se quiser menor ainda, ex: 10.0f)
 
-			float imgX = (float)PosX + (LifeBarWidth / 2.0f) - 28.0f;
+			// Ajustei a posição X para -24 para que ele fique um pouquinho mais perto do texto
+			float imgX = (float)PosX + (LifeBarWidth / 2.0f) - 20.0f;
+
+			// Ajustei a posição Y para -19 para manter o ícone centralizado na altura da letra
 			float imgY = (float)PosY - 21.0f;
 
-			// Passamos os 64.0f e 64.0f para desenhar a textura por completo
-			// (Se a sua imagem for 32x32, altere os 64.0f para 32.0f)
 			pRenderBitmap(9000 + rankIndex, imgX, imgY, imgSize, imgSize, 0.0f, 0.0f, 1.0f, 1.0f, 1, 1, 0.0f);
 
 			// 2. DESENHA O TEXTO

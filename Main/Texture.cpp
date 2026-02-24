@@ -9,7 +9,6 @@
 #include "Util.h"
 
 int& TextureBegin = *(int*)0x007AFE7DC;
-
 int& TextureCurrent = *(int*)0x07AFE7E0;
 
 TEXTURE m_Texture[MAX_TEXTURE];
@@ -17,10 +16,8 @@ TEXTURE m_Texture[MAX_TEXTURE];
 void InitTexture() // OK
 {
 	SetTextures();
-
-	SetCompleteHook(0xE8,0x0064C431,&OpenBasicData);
-
-	SetCompleteHook(0xE9,0x0062B1F0,&SetMaxTextures);
+	SetCompleteHook(0xE8, 0x0064C431, &OpenBasicData);
+	SetCompleteHook(0xE9, 0x0062B1F0, &SetMaxTextures);
 }
 
 void OpenBasicData(HDC hDC) // OK
@@ -52,9 +49,6 @@ void OpenBasicData(HDC hDC) // OK
 
 	LoadItemModel(GET_ITEM_MODEL(12, 143), "Item\\", "HighRefineStone");
 	LoadItemTexture(GET_ITEM_MODEL(12, 143), "Item\\");
-
-
-
 
 	for (int n = 0; n < MAX_CUSTOM_JEWEL; n++)
 	{
@@ -92,7 +86,6 @@ void OpenBasicData(HDC hDC) // OK
 		}
 	}
 
-
 	// ====================================================
 	// CARREGADOR DE IMAGENS DO CUSTOM RANK (1 a 15)
 	// ====================================================
@@ -100,16 +93,18 @@ void OpenBasicData(HDC hDC) // OK
 	{
 		char path[MAX_PATH];
 
-		// SEM a palavra "Data\\" (O jogo já a coloca automaticamente!)
+		// O "Data\\" É OBRIGATÓRIO AQUI!
 		wsprintf(path, "Custom\\Rank\\Rank%d.tga", i);
 
-		// Carrega e regista a imagem com sucesso num ID seguro
+		// Carrega a imagem
 		pLoadImageTGA(path, 9000 + i, 0x2601, 0x2900, 1, 0);
+
+		// Regista a imagem para a placa de vídeo não a ignorar
+		m_Texture[9000 + i].Texture = 9000 + i;
+		m_Texture[9000 + i].Width = 64.0f;
+		m_Texture[9000 + i].Height = 64.0f;
 	}
-
 }
-
-// Fim da função OpenBasicData
 
 void SetMaxTextures(DWORD count) // OK
 {
@@ -119,110 +114,110 @@ void SetMaxTextures(DWORD count) // OK
 
 void SetTextures() // OK
 {
-	memset(m_Texture,0,sizeof(m_Texture));
+	memset(m_Texture, 0, sizeof(m_Texture));
 
-	SetDword(0x004203BC+3,(DWORD)&m_Texture);
-	SetDword(0x0042048D+3,(DWORD)&m_Texture);
-	SetDword(0x00421AF6+3,(DWORD)&m_Texture);
-	SetDword(0x00421DA4+3,(DWORD)&m_Texture);
-	SetDword(0x005FA38D+3,(DWORD)&m_Texture);
-	SetDword(0x00606967+1,(DWORD)&m_Texture);
-	SetDword(0x00607A8D+2,(DWORD)&m_Texture);
-	SetDword(0x0062B242+2,(DWORD)&m_Texture);
-	SetDword(0x0062B25F+1,(DWORD)&m_Texture);
-	SetDword(0x0062B32C+2,(DWORD)&m_Texture);
-	SetDword(0x0062B4DF+1,(DWORD)&m_Texture);
-	SetDword(0x006366DA+1,(DWORD)&m_Texture);
-	SetDword(0x00642025+2,(DWORD)&m_Texture);
-	SetDword(0x00642087+1,(DWORD)&m_Texture);
-	SetDword(0x0064C350+1,(DWORD)&m_Texture);
-	SetDword(0x006F28D3+1,(DWORD)&m_Texture);
-	SetDword(0x006F3193+1,(DWORD)&m_Texture);
-	SetDword(0x006F31A1+2,(DWORD)&m_Texture);
-	SetDword(0x006F9E06+1,(DWORD)&m_Texture);
-	SetDword(0x006FA2FB+1,(DWORD)&m_Texture);
-	SetDword(0x006FA832+1,(DWORD)&m_Texture);
+	SetDword(0x004203BC + 3, (DWORD)&m_Texture);
+	SetDword(0x0042048D + 3, (DWORD)&m_Texture);
+	SetDword(0x00421AF6 + 3, (DWORD)&m_Texture);
+	SetDword(0x00421DA4 + 3, (DWORD)&m_Texture);
+	SetDword(0x005FA38D + 3, (DWORD)&m_Texture);
+	SetDword(0x00606967 + 1, (DWORD)&m_Texture);
+	SetDword(0x00607A8D + 2, (DWORD)&m_Texture);
+	SetDword(0x0062B242 + 2, (DWORD)&m_Texture);
+	SetDword(0x0062B25F + 1, (DWORD)&m_Texture);
+	SetDword(0x0062B32C + 2, (DWORD)&m_Texture);
+	SetDword(0x0062B4DF + 1, (DWORD)&m_Texture);
+	SetDword(0x006366DA + 1, (DWORD)&m_Texture);
+	SetDword(0x00642025 + 2, (DWORD)&m_Texture);
+	SetDword(0x00642087 + 1, (DWORD)&m_Texture);
+	SetDword(0x0064C350 + 1, (DWORD)&m_Texture);
+	SetDword(0x006F28D3 + 1, (DWORD)&m_Texture);
+	SetDword(0x006F3193 + 1, (DWORD)&m_Texture);
+	SetDword(0x006F31A1 + 2, (DWORD)&m_Texture);
+	SetDword(0x006F9E06 + 1, (DWORD)&m_Texture);
+	SetDword(0x006FA2FB + 1, (DWORD)&m_Texture);
+	SetDword(0x006FA832 + 1, (DWORD)&m_Texture);
 
-	SetDword(0x004074EB+2,(DWORD)&m_Texture->Width);
-	SetDword(0x00414D88+2,(DWORD)&m_Texture->Width);
-	SetDword(0x00414DBE+2,(DWORD)&m_Texture->Width);
-	SetDword(0x00414E00+2,(DWORD)&m_Texture->Width);
-	SetDword(0x00414E42+2,(DWORD)&m_Texture->Width);
-	SetDword(0x00414ECF+2,(DWORD)&m_Texture->Width);
-	SetDword(0x00415296+2,(DWORD)&m_Texture->Width);
-	SetDword(0x004152EC+2,(DWORD)&m_Texture->Width);
-	SetDword(0x005FA386+3,(DWORD)&m_Texture->Width);
-	SetDword(0x006ED616+2,(DWORD)&m_Texture->Width);
-	SetDword(0x006EE1D9+2,(DWORD)&m_Texture->Width);
-	SetDword(0x006EE329+2,(DWORD)&m_Texture->Width);
-	SetDword(0x006EEA3A+2,(DWORD)&m_Texture->Width);
+	SetDword(0x004074EB + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x00414D88 + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x00414DBE + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x00414E00 + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x00414E42 + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x00414ECF + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x00415296 + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x004152EC + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x005FA386 + 3, (DWORD)&m_Texture->Width);
+	SetDword(0x006ED616 + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x006EE1D9 + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x006EE329 + 2, (DWORD)&m_Texture->Width);
+	SetDword(0x006EEA3A + 2, (DWORD)&m_Texture->Width);
 
-	SetDword(0x00414DA3+2,(DWORD)&m_Texture->Height);
-	SetDword(0x00414DDF+2,(DWORD)&m_Texture->Height);
-	SetDword(0x00414E21+2,(DWORD)&m_Texture->Height);
-	SetDword(0x00414E5D+2,(DWORD)&m_Texture->Height);
-	SetDword(0x00414EFA+2,(DWORD)&m_Texture->Height);
-	SetDword(0x00415358+2,(DWORD)&m_Texture->Height);
-	SetDword(0x004153AE+2,(DWORD)&m_Texture->Height);
-	SetDword(0x0048C08B+2,(DWORD)&m_Texture->Height);
-	SetDword(0x00606F24+2,(DWORD)&m_Texture->Height);
-	SetDword(0x006E9FFA+2,(DWORD)&m_Texture->Height);
-	SetDword(0x006ED62E+2,(DWORD)&m_Texture->Height);
-	SetDword(0x006EE1F7+2,(DWORD)&m_Texture->Height);
-	SetDword(0x006EE347+2,(DWORD)&m_Texture->Height);
-	SetDword(0x006EEA50+2,(DWORD)&m_Texture->Height);
+	SetDword(0x00414DA3 + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x00414DDF + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x00414E21 + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x00414E5D + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x00414EFA + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x00415358 + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x004153AE + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x0048C08B + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x00606F24 + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x006E9FFA + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x006ED62E + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x006EE1F7 + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x006EE347 + 2, (DWORD)&m_Texture->Height);
+	SetDword(0x006EEA50 + 2, (DWORD)&m_Texture->Height);
 
-	SetDword(0x004F915B+3,(DWORD)&m_Texture->Component);
-	SetDword(0x004F9228+3,(DWORD)&m_Texture->Component);
-	SetDword(0x004FA3A3+3,(DWORD)&m_Texture->Component);
-	SetDword(0x004FA445+3,(DWORD)&m_Texture->Component);
-	SetDword(0x00503B6E+3,(DWORD)&m_Texture->Component);
-	SetDword(0x00503BB4+3,(DWORD)&m_Texture->Component);
-	SetDword(0x00504CBD+3,(DWORD)&m_Texture->Component);
-	SetDword(0x00504D03+3,(DWORD)&m_Texture->Component);
-	SetDword(0x00506361+3,(DWORD)&m_Texture->Component);
-	SetDword(0x00506391+3,(DWORD)&m_Texture->Component);
-	SetDword(0x006430D8+3,(DWORD)&m_Texture->Component);
-	SetDword(0x006ED643+3,(DWORD)&m_Texture->Component);
-	SetDword(0x006F42B9+3,(DWORD)&m_Texture->Component);
+	SetDword(0x004F915B + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x004F9228 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x004FA3A3 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x004FA445 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x00503B6E + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x00503BB4 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x00504CBD + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x00504D03 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x00506361 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x00506391 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x006430D8 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x006ED643 + 3, (DWORD)&m_Texture->Component);
+	SetDword(0x006F42B9 + 3, (DWORD)&m_Texture->Component);
 
-	SetDword(0x00606F11+2,(DWORD)&m_Texture->Ref);
+	SetDword(0x00606F11 + 2, (DWORD)&m_Texture->Ref);
 
-	SetDword(0x005FA173+2,(DWORD)&m_Texture+1732);
-	SetDword(0x005FA71C+2,(DWORD)&m_Texture+1732);
+	SetDword(0x005FA173 + 2, (DWORD)&m_Texture + 1732);
+	SetDword(0x005FA71C + 2, (DWORD)&m_Texture + 1732);
 
-	SetDword(0x005FA182+2,(DWORD)&m_Texture+1736);
-	SetDword(0x005FA72A+2,(DWORD)&m_Texture+1736);
+	SetDword(0x005FA182 + 2, (DWORD)&m_Texture + 1736);
+	SetDword(0x005FA72A + 2, (DWORD)&m_Texture + 1736);
 
-	SetDword(0x005FA2F3+3,(DWORD)&m_Texture+1740);
-	SetDword(0x005FA7CF+3,(DWORD)&m_Texture+1740);
+	SetDword(0x005FA2F3 + 3, (DWORD)&m_Texture + 1740);
+	SetDword(0x005FA7CF + 3, (DWORD)&m_Texture + 1740);
 
-	SetDword(0x005FA2DC+1,(DWORD)&m_Texture+1741);
-	SetDword(0x005FA7B8+1,(DWORD)&m_Texture+1741);
+	SetDword(0x005FA2DC + 1, (DWORD)&m_Texture + 1741);
+	SetDword(0x005FA7B8 + 1, (DWORD)&m_Texture + 1741);
 
-	SetDword(0x005FA193+2,(DWORD)&m_Texture+1746);
-	SetDword(0x005FA2ED+2,(DWORD)&m_Texture+1746);
-	SetDword(0x005FA73B+2,(DWORD)&m_Texture+1746);
-	SetDword(0x005FA7C9+2,(DWORD)&m_Texture+1746);
+	SetDword(0x005FA193 + 2, (DWORD)&m_Texture + 1746);
+	SetDword(0x005FA2ED + 2, (DWORD)&m_Texture + 1746);
+	SetDword(0x005FA73B + 2, (DWORD)&m_Texture + 1746);
+	SetDword(0x005FA7C9 + 2, (DWORD)&m_Texture + 1746);
 
-	SetDword(0x005A3832+3,(DWORD)&m_Texture+1790);
+	SetDword(0x005A3832 + 3, (DWORD)&m_Texture + 1790);
 }
 
-void LoadItemModel(int index,char* folder,char* name) // OK
+void LoadItemModel(int index, char* folder, char* name) // OK
 {
-	if(name[0] == 0)
+	if (name[0] == 0)
 	{
 		return;
 	}
 
-	char path[MAX_PATH]={ 0 };
+	char path[MAX_PATH] = { 0 };
 
-	wsprintf(path,"Data\\%s",folder);
+	wsprintf(path, "Data\\%s", folder);
 
-	pLoadItemModel(index,path,name,-1);
+	pLoadItemModel(index, path, name, -1);
 }
 
-void LoadItemTexture(int index,char* folder) // OK
+void LoadItemTexture(int index, char* folder) // OK
 {
-	pLoadItemTexture(index,folder,GL_REPEAT,GL_NEAREST,GL_TRUE);
+	pLoadItemTexture(index, folder, GL_REPEAT, GL_NEAREST, GL_TRUE);
 }
