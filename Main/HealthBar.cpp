@@ -139,13 +139,13 @@ void DrawNewHealthBar() // OK
 			case 6: wsprintf(rankName, "Tenente"); break;
 			case 7: wsprintf(rankName, "Capitão"); break;
 			case 8: wsprintf(rankName, "Major"); break;
-			case 9: wsprintf(rankName, "Tenente Coronel"); break;
+			case 9: wsprintf(rankName, "Ten. Coronel"); break;
 			case 10: wsprintf(rankName, "Coronel"); break;
 			case 11: wsprintf(rankName, "General"); break;
 			case 12: wsprintf(rankName, "Marechal"); break;
 			case 13: wsprintf(rankName, "Gladiador"); break;
-			case 14: wsprintf(rankName, "Herói"); break;
-			case 15: wsprintf(rankName, "Lenda Suprema"); break;
+			case 14: wsprintf(rankName, "Grande Herói"); break;
+			case 15: wsprintf(rankName, "Supremo"); break;
 			}
 
 			EnableAlphaTest(true);
