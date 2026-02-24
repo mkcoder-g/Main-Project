@@ -99,15 +99,12 @@ void OpenBasicData(HDC hDC) // OK
 	for (int i = 1; i <= 15; i++)
 	{
 		char path[MAX_PATH];
-		wsprintf(path, "Data\\Custom\\Rank\\Rank%d.tga", i);
 
-		// 1. Carrega o ficheiro TGA para a memória da Placa de Vídeo (OpenGL)
+		// SEM a palavra "Data\\" (O jogo já a coloca automaticamente!)
+		wsprintf(path, "Custom\\Rank\\Rank%d.tga", i);
+
+		// Carrega e regista a imagem com sucesso num ID seguro
 		pLoadImageTGA(path, 9000 + i, 0x2601, 0x2900, 1, 0);
-
-		// 2. A MÁGICA: Regista a imagem na lista interna do Cliente!
-		m_Texture[9000 + i].Texture = 9000 + i; // Associa o ID à matriz do jogo
-		m_Texture[9000 + i].Width = 64.0f;      // Define a largura original
-		m_Texture[9000 + i].Height = 64.0f;     // Define a altura original
 	}
 
 }

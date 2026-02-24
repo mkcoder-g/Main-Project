@@ -151,15 +151,17 @@ void DrawNewHealthBar() // OK
 			}
 
 			EnableAlphaTest(true);
-			glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+			EnableAlphaBlend(); // Ativa a transparência nativa do TGA
+			glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Restaura as cores reais da imagem
 
 			// 1. DESENHA A IMAGEM (ÍCONE À ESQUERDA)
-			float imgSize = 16.0f; // Tamanho reduzido para não cobrir a tela toda
+			float imgSize = 16.0f;
 
-			// Puxa a imagem para a esquerda (-28 pixels do centro) e iguala a altura do texto (-21)
 			float imgX = (float)PosX + (LifeBarWidth / 2.0f) - 28.0f;
 			float imgY = (float)PosY - 21.0f;
 
+			// Passamos os 64.0f e 64.0f para desenhar a textura por completo
+			// (Se a sua imagem for 32x32, altere os 64.0f para 32.0f)
 			pRenderBitmap(9000 + rankIndex, imgX, imgY, imgSize, imgSize, 0.0f, 0.0f, 1.0f, 1.0f, 1, 1, 0.0f);
 
 			// 2. DESENHA O TEXTO
