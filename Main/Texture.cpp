@@ -29,66 +29,66 @@ void OpenBasicData(HDC hDC) // OK
 
 	TextureCurrent = 6000;
 
-	LoadItemModel(GET_ITEM_MODEL(12,136),"Item\\","Jewel03");
-	LoadItemTexture(GET_ITEM_MODEL(12,136),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 136), "Item\\", "Jewel03");
+	LoadItemTexture(GET_ITEM_MODEL(12, 136), "Item\\");
 
-	LoadItemModel(GET_ITEM_MODEL(12,137),"Item\\","jewel22");
-	LoadItemTexture(GET_ITEM_MODEL(12,137),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 137), "Item\\", "jewel22");
+	LoadItemTexture(GET_ITEM_MODEL(12, 137), "Item\\");
 
-	LoadItemModel(GET_ITEM_MODEL(12,138),"Item\\","suho");
-	LoadItemTexture(GET_ITEM_MODEL(12,138),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 138), "Item\\", "suho");
+	LoadItemTexture(GET_ITEM_MODEL(12, 138), "Item\\");
 
-	LoadItemModel(GET_ITEM_MODEL(12,139),"Item\\","rs");
-	LoadItemTexture(GET_ITEM_MODEL(12,139),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 139), "Item\\", "rs");
+	LoadItemTexture(GET_ITEM_MODEL(12, 139), "Item\\");
 
-	LoadItemModel(GET_ITEM_MODEL(12,140),"Item\\","jos");
-	LoadItemTexture(GET_ITEM_MODEL(12,140),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 140), "Item\\", "jos");
+	LoadItemTexture(GET_ITEM_MODEL(12, 140), "Item\\");
 
-	LoadItemModel(GET_ITEM_MODEL(12,141),"Item\\","Jewel15");
-	LoadItemTexture(GET_ITEM_MODEL(12,141),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 141), "Item\\", "Jewel15");
+	LoadItemTexture(GET_ITEM_MODEL(12, 141), "Item\\");
 
-	LoadItemModel(GET_ITEM_MODEL(12,142),"Item\\","LowRefineStone");
-	LoadItemTexture(GET_ITEM_MODEL(12,142),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 142), "Item\\", "LowRefineStone");
+	LoadItemTexture(GET_ITEM_MODEL(12, 142), "Item\\");
 
-	LoadItemModel(GET_ITEM_MODEL(12,143),"Item\\","HighRefineStone");
-	LoadItemTexture(GET_ITEM_MODEL(12,143),"Item\\");
+	LoadItemModel(GET_ITEM_MODEL(12, 143), "Item\\", "HighRefineStone");
+	LoadItemTexture(GET_ITEM_MODEL(12, 143), "Item\\");
 
 
-	
 
-	for(int n=0;n<MAX_CUSTOM_JEWEL;n++)
+
+	for (int n = 0; n < MAX_CUSTOM_JEWEL; n++)
 	{
-		if(gCustomJewel.m_CustomJewelInfo[n].Index != -1)
+		if (gCustomJewel.m_CustomJewelInfo[n].Index != -1)
 		{
-			LoadItemModel((gCustomJewel.m_CustomJewelInfo[n].ItemIndex+ITEM_BASE_MODEL),"Item\\",gCustomJewel.m_CustomJewelInfo[n].ModelName);
-			LoadItemTexture((gCustomJewel.m_CustomJewelInfo[n].ItemIndex+ITEM_BASE_MODEL),"Item\\");
+			LoadItemModel((gCustomJewel.m_CustomJewelInfo[n].ItemIndex + ITEM_BASE_MODEL), "Item\\", gCustomJewel.m_CustomJewelInfo[n].ModelName);
+			LoadItemTexture((gCustomJewel.m_CustomJewelInfo[n].ItemIndex + ITEM_BASE_MODEL), "Item\\");
 		}
 	}
 
-	for(int n=0;n<MAX_CUSTOM_WING;n++)
+	for (int n = 0; n < MAX_CUSTOM_WING; n++)
 	{
-		if(gCustomWing.m_CustomWingInfo[n].Index != -1)
+		if (gCustomWing.m_CustomWingInfo[n].Index != -1)
 		{
-			LoadItemModel((gCustomWing.m_CustomWingInfo[n].ItemIndex+ITEM_BASE_MODEL),"Item\\",gCustomWing.m_CustomWingInfo[n].ModelName);
-			LoadItemTexture((gCustomWing.m_CustomWingInfo[n].ItemIndex+ITEM_BASE_MODEL),"Item\\");
+			LoadItemModel((gCustomWing.m_CustomWingInfo[n].ItemIndex + ITEM_BASE_MODEL), "Item\\", gCustomWing.m_CustomWingInfo[n].ModelName);
+			LoadItemTexture((gCustomWing.m_CustomWingInfo[n].ItemIndex + ITEM_BASE_MODEL), "Item\\");
 		}
 	}
 
-	for(int n=0;n<MAX_CUSTOM_ITEM;n++)
+	for (int n = 0; n < MAX_CUSTOM_ITEM; n++)
 	{
-		if(gCustomItem.m_CustomItemInfo[n].Index != -1)
+		if (gCustomItem.m_CustomItemInfo[n].Index != -1)
 		{
-			LoadItemModel((gCustomItem.m_CustomItemInfo[n].ItemIndex+ITEM_BASE_MODEL),((gCustomItem.m_CustomItemInfo[n].ItemIndex >= GET_ITEM(7,0) && gCustomItem.m_CustomItemInfo[n].ItemIndex<GET_ITEM(12,0)) ? "Player\\" : "Item\\"),gCustomItem.m_CustomItemInfo[n].ModelName);
-			LoadItemTexture((gCustomItem.m_CustomItemInfo[n].ItemIndex+ITEM_BASE_MODEL),((gCustomItem.m_CustomItemInfo[n].ItemIndex >= GET_ITEM(7,0) && gCustomItem.m_CustomItemInfo[n].ItemIndex<GET_ITEM(12,0)) ? "Player\\" : "Item\\"));
+			LoadItemModel((gCustomItem.m_CustomItemInfo[n].ItemIndex + ITEM_BASE_MODEL), ((gCustomItem.m_CustomItemInfo[n].ItemIndex >= GET_ITEM(7, 0) && gCustomItem.m_CustomItemInfo[n].ItemIndex < GET_ITEM(12, 0)) ? "Player\\" : "Item\\"), gCustomItem.m_CustomItemInfo[n].ModelName);
+			LoadItemTexture((gCustomItem.m_CustomItemInfo[n].ItemIndex + ITEM_BASE_MODEL), ((gCustomItem.m_CustomItemInfo[n].ItemIndex >= GET_ITEM(7, 0) && gCustomItem.m_CustomItemInfo[n].ItemIndex < GET_ITEM(12, 0)) ? "Player\\" : "Item\\"));
 		}
 	}
 
-	for(int n=0;n<MAX_CUSTOM_ITEM_BOW;n++)
+	for (int n = 0; n < MAX_CUSTOM_ITEM_BOW; n++)
 	{
-		if(gCustomItemBow.m_CustomItemBowInfo[n].Index != -1)
+		if (gCustomItemBow.m_CustomItemBowInfo[n].Index != -1)
 		{
-			LoadItemModel((gCustomItemBow.m_CustomItemBowInfo[n].ItemIndex+ITEM_BASE_MODEL),"Item\\",gCustomItemBow.m_CustomItemBowInfo[n].ModelName);
-			LoadItemTexture((gCustomItemBow.m_CustomItemBowInfo[n].ItemIndex+ITEM_BASE_MODEL),"Item\\");
+			LoadItemModel((gCustomItemBow.m_CustomItemBowInfo[n].ItemIndex + ITEM_BASE_MODEL), "Item\\", gCustomItemBow.m_CustomItemBowInfo[n].ModelName);
+			LoadItemTexture((gCustomItemBow.m_CustomItemBowInfo[n].ItemIndex + ITEM_BASE_MODEL), "Item\\");
 		}
 	}
 
@@ -99,12 +99,20 @@ void OpenBasicData(HDC hDC) // OK
 	for (int i = 1; i <= 15; i++)
 	{
 		char path[MAX_PATH];
-		wsprintf(path, "Data\\Custom\\Rank\\Rank%d.ozt", i);
-		
-		// TROCADO DE 31000 PARA 9000
-		pLoadImageTGA(path, 9000 + i, 0x2601, 0x2900, 1, 0); 
+		wsprintf(path, "Data\\Custom\\Rank\\Rank%d.tga", i);
+
+		// 1. Carrega o ficheiro TGA para a memória da Placa de Vídeo (OpenGL)
+		pLoadImageTGA(path, 9000 + i, 0x2601, 0x2900, 1, 0);
+
+		// 2. A MÁGICA: Regista a imagem na lista interna do Cliente!
+		m_Texture[9000 + i].Texture = 9000 + i; // Associa o ID à matriz do jogo
+		m_Texture[9000 + i].Width = 64.0f;      // Define a largura original
+		m_Texture[9000 + i].Height = 64.0f;     // Define a altura original
 	}
-} // Fim da função OpenBasicData
+
+}
+
+// Fim da função OpenBasicData
 
 void SetMaxTextures(DWORD count) // OK
 {
