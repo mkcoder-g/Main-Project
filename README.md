@@ -1,7 +1,7 @@
 # Desenvolvimento de um Main Season 3 (KOR)
 
-## CUSTOMIZAÇÕES
+### CUSTOMIZAÇÕES
  - Custom Rank (Patentes com icones em cima do nome do player)
-## FIXES
+### FIXES
 
-## DESEMPENHO
+### DESEMPENHO
