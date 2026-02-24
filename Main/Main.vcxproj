@@ -112,6 +112,7 @@
     <ClCompile Include="CCRC32.Cpp" />
     <ClCompile Include="ChaosBox.cpp" />
     <ClCompile Include="Common.cpp" />
+    <ClCompile Include="CustomDailyRewardMain.cpp" />
     <ClCompile Include="CustomEffect.cpp" />
     <ClCompile Include="CustomFog.cpp" />
     <ClCompile Include="CustomItem.cpp" />

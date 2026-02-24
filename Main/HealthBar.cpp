@@ -6,6 +6,7 @@
 #include "Protect.h"
 #include "Util.h"
 #include "CustomRankingTotal.h"
+#include "CustomDailyRewardMain.h"
 
 NEW_HEALTH_BAR gNewHealthBar[MAX_MAIN_VIEWPORT];
 WORD gCustomRankData[MAX_CUSTOM_RANK] = { 0 }; // Array otimizado (Sem necessidade de structs)
@@ -154,7 +155,7 @@ void DrawNewHealthBar() // OK
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Restaura as cores reais da imagem
 
 			// 1. DESENHA A IMAGEM (ÍCONE À ESQUERDA)
-			float imgSize = 12.0f; // <-- REDUZIDO DE 16.0f PARA 12.0f (Mude este número se quiser menor ainda, ex: 10.0f)
+			float imgSize = 20.0f; // <-- REDUZIDO DE 16.0f PARA 12.0f (Mude este número se quiser menor ainda, ex: 10.0f)
 
 			// Ajustei a posição X para -24 para que ele fique um pouquinho mais perto do texto
 			float imgX = (float)PosX + (LifeBarWidth / 2.0f) - 20.0f;
@@ -204,5 +205,13 @@ void DrawNewHealthBar() // OK
 	// ==========================================
 	CheckRankingKeyF5();
 	DrawCustomRankingWindow();
+	// ==========================================
+
+	// ==========================================
+	// SISTEMA DE BONUS DIÁRIO
+	// ==========================================
+	CheckDailyRewardClick(); // <-- ADICIONE ESTA LINHA AQUI! (O jogo agora "ouve")
+	DrawDailyRewardIcon();   // O jogo desenha o ícone
+	DrawDailyRewardWindow(); // O jogo desenha a janela (se estiver aberta)
 	// ==========================================
 }

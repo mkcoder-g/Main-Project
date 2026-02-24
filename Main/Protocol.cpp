@@ -19,6 +19,7 @@
 #include "Util.h"
 #include "WindowTime.h"
 #include "CustomRankingTotal.h" // <-- NOVO: OBRIGATÓRIO PARA LER O PACOTE
+#include "CustomDailyRewardMain.h"
 
 #pragma pack(push, 1) // TRAVA DE SEGURANÇA DE REDE
 struct PMSG_CUSTOM_RANK_RECV
@@ -33,6 +34,14 @@ void GCCustomRankRecv(PMSG_CUSTOM_RANK_RECV* lpMsg);
 
 BOOL ProtocolCoreEx(BYTE head, BYTE* lpMsg, int size, int key) // OK
 {
+	// ==============================================================
+	// INTERCETAÇÃO DO CALENDÁRIO DIÁRIO (PACOTE GIGANTE C2)
+	// ==============================================================
+	if (lpMsg[0] == 0xC2 && lpMsg[3] == 0xF3 && lpMsg[4] == 0x5B)
+	{
+		GCCustomDailyRewardDataRecv((PMSG_DAILY_REWARD_DATA_RECV*)lpMsg);
+		return 1;
+	}
 	switch (head)
 	{
 	case 0xD7:
