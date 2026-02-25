@@ -104,6 +104,15 @@ void OpenBasicData(HDC hDC) // OK
 		m_Texture[9000 + i].Width = 64.0f;
 		m_Texture[9000 + i].Height = 64.0f;
 	}
+
+	// ====================================================
+	// CARREGADOR DA IMAGEM DO BÓNUS DIÁRIO (GIFT)
+	// ====================================================
+	pLoadImageTGA("Custom\\Gift\\Gift.tga", 9020, 0x2601, 0x2900, 1, 0);
+
+	m_Texture[9020].Texture = 9020;
+	m_Texture[9020].Width = 64.0f;
+	m_Texture[9020].Height = 64.0f;
 }
 
 void SetMaxTextures(DWORD count) // OK
