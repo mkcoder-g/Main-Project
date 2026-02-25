@@ -155,13 +155,13 @@ void DrawNewHealthBar() // OK
 			glColor4f(1.0f, 1.0f, 1.0f, 1.0f); // Restaura as cores reais da imagem
 
 			// 1. DESENHA A IMAGEM (ÍCONE À ESQUERDA)
-			float imgSize = 20.0f; // <-- REDUZIDO DE 16.0f PARA 12.0f (Mude este número se quiser menor ainda, ex: 10.0f)
+			float imgSize = 12.0f; // <-- REDUZIDO DE 16.0f PARA 12.0f (Mude este número se quiser menor ainda, ex: 10.0f)
 
 			// Ajustei a posição X para -24 para que ele fique um pouquinho mais perto do texto
 			float imgX = (float)PosX + (LifeBarWidth / 2.0f) - 20.0f;
 
 			// Ajustei a posição Y para -19 para manter o ícone centralizado na altura da letra
-			float imgY = (float)PosY - 21.0f;
+			float imgY = (float)PosY - 19.0f;
 
 			pRenderBitmap(9000 + rankIndex, imgX, imgY, imgSize, imgSize, 0.0f, 0.0f, 1.0f, 1.0f, 1, 1, 0.0f);
 
